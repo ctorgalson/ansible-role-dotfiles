@@ -1,2 +1,24 @@
 ---
 # defaults file for ansible-role-dotfiles
+
+# Set to "/User" for macOS hosts.
+dotfiles_home: "/home"
+
+# Set these to the user and group whose dotfiles the role configures.
+# dotfiles_owner: "molecule"
+# dotfiles_group: "molecule"
+
+# This directory will be created in the user's home directory and dotfiles
+# will be cloned into it.
+dotfiles_conf_dir: ".ansible-managed-config"
+
+# These are the git repository url and the name of the directory to clone into.
+dotfiles_repo_repo: "https://github.com/ctorgalson/dotfiles.git"
+dotfiles_repo_name: "dotfiles"
+
+# A list of filenames only that should be linked from the repository directory.
+# This allows different dotfiles from the same repo to be used on different
+# hosts.
+#
+# If this is not set, ALL files in the repository will be symlinked.
+dotfiles_whitelist: []
