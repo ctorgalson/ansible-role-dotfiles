@@ -4,13 +4,8 @@
   roles:
     - role: ansible-role-dotfiles
   vars:
-    dotfiles_home: "/home"
     dotfiles_owner: "molecule"
     dotfiles_group: "molecule"
-    dotfiles_config_dir: ".ansible-managed-config"
-    dotfiles_repo:
-      - repo: "https://github.com/ctorgalson/dotfiles.git"
-        name: "dotfiles"
     dotfiles_whitelist:
       - ".vimrc.after"
       - ".vimrc.before"
