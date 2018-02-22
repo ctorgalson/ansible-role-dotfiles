@@ -41,7 +41,7 @@
     owner: "{{ dotfiles_owner }}"
     group: "{{ dotfiles_group }}"
   with_items: "{{ dotfiles_paths.stdout_lines }}"
-  when: "item | basename in dotfiles_whitelist or dotfiles_whitelist | list < 1"
+  when: "(item | basename in dotfiles_whitelist) or (dotfiles_whitelist | length < 1)"
 
 - name: Link dotfiles into place.
   file:
@@ -52,4 +52,4 @@
     owner: "{{ dotfiles_owner }}"
     group: "{{ dotfiles_group }}"
   with_items: "{{ dotfiles_paths.stdout_lines }}"
-  when: "item | basename in dotfiles_whitelist or dotfiles_whitelist | length < 1"
+  when: "(item | basename in dotfiles_whitelist) or (dotfiles_whitelist | length < 1)"
