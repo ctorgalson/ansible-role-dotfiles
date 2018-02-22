@@ -1,0 +1,21 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Install required packages on host.
+      apt:
+        name: "{{ item }}"
+      with_items:
+        - git
+
+    - name: Create molecule user for testing.
+      user:
+        name: molecule
+
+    - name: Ensure dotfiles parent directory exists.
+      file:
+        path: "/home/molecule/.ansible-managed-config"
+        state: directory
+        owner: "molecule"
+        group: "molecule"

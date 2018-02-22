@@ -1,0 +1,49 @@
+---
+# tasks file for ansible-role-dotfiles
+
+- name: Set path-related facts.
+  set_fact:
+    dotfiles_home_dir: "{{ dotfiles_home }}/{{ dotfiles_owner }}"
+    dotfiles_config_segment: "/{{ dotfiles_config_dir }}/{{ dotfiles_repo.0.name }}"
+
+- name: Clone dotfiles repo to host.
+  git:
+    repo: "{{ dotfiles_repo.0.repo }}"
+    dest: "{{ dotfiles_home_dir }}/{{ dotfiles_config_dir }}/{{ dotfiles_repo.0.name }}"
+    version: master
+    clone: true
+
+- name: Fix permissions on newly cloned repository.
+  file:
+    path: "{{ dotfiles_home_dir }}/{{ dotfiles_config_dir }}/{{ dotfiles_repo.0.name }}"
+    state: directory
+    recurse: true
+    owner: "{{ dotfiles_owner }}"
+    group: "{{ dotfiles_group }}"
+  changed_when: false
+
+- name: Find files in newly cloned repository.
+  find:
+    paths: "{{ dotfiles_home_dir }}/{{ dotfiles_config_dir }}/{{ dotfiles_repo.0.name }}"
+    file_type: file
+    recurse: true
+    hidden: true
+    patterns: "{{ dotfiles_whitelist | default(omit) }}"
+  register: dotfiles
+
+- name: Create required config directories.
+  file:
+    path: "{{ item.path | replace(dotfiles_config_segment, '') | dirname }}"
+    state: directory
+    owner: "{{ dotfiles_owner }}"
+    group: "{{ dotfiles_group }}"
+  with_items: "{{ dotfiles.files }}"
+
+- name: Link dotfiles into place.
+  file:
+    src: "{{ item.path }}"
+    dest: "{{ item.path | replace(dotfiles_config_segment, '') }}"
+    state: link
+    owner: "{{ dotfiles_owner }}"
+    group: "{{ dotfiles_group }}"
+  with_items: "{{ dotfiles.files }}"
