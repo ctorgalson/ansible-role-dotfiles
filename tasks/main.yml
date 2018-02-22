@@ -30,6 +30,7 @@
   command: >
     find "{{ dotfiles_repo_dest }}" -type f
     ! -path "{{ dotfiles_repo_dest }}/.git/*"
+    ! -path "{{ dotfiles_repo_dest }}/README.md"
   changed_when: false
   register: dotfiles_paths
 
@@ -47,6 +48,7 @@
     src: "{{ item }}"
     dest: "{{ item | replace(dotfiles_config_segment, '') }}"
     state: link
+    force: "{{ dotfiles_force_links }}"
     owner: "{{ dotfiles_owner }}"
     group: "{{ dotfiles_group }}"
   with_items: "{{ dotfiles_paths.stdout_lines }}"

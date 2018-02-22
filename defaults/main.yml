@@ -22,3 +22,6 @@ dotfiles_repo_name: "dotfiles"
 #
 # If this is not set, ALL files in the repository will be symlinked.
 dotfiles_whitelist: []
+
+# Set to `true` to force overwriting existing files or symlinks.
+dotfiles_force_links: false
