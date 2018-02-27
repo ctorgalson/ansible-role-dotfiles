@@ -14,7 +14,11 @@ dotfiles_conf_dir: ".ansible-managed-config"
 
 # These are the git repository url and the name of the directory to clone into.
 dotfiles_repo_repo: "https://github.com/ctorgalson/dotfiles.git"
+# Note that `dotfiles_repo_name` should match the filename in
+# `dotfiles_repo_repo`.
 dotfiles_repo_name: "dotfiles"
+dotfiles_user_name: "ctorgalson"
+dotfiles_add_ssh_origin: false
 
 # A list of filenames only that should be linked from the repository directory.
 # This allows different dotfiles from the same repo to be used on different

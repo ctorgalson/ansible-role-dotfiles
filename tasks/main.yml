@@ -26,6 +26,16 @@
     group: "{{ dotfiles_group }}"
   changed_when: false
 
+- name: Change git remote to `git@` style when configured.
+  command: "{{ item }}"
+  args:
+    chdir: "{{ dotfiles_repo_dest }}"
+  with_items:
+    - "git remote rm origin"
+    - "git remote add origin git@github.com:{{ dotfiles_user_name }}/{{ dotfiles_repo_name }}.git"
+  become: true
+  when: dotfiles_add_ssh_origin
+
 - name: Find files in newly cloned repository.
   command: >
     find "{{ dotfiles_repo_dest }}" -type f
