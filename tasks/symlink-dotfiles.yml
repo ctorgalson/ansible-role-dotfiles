@@ -1,0 +1,29 @@
+---
+# Dotfile symlink tasks for ansible-role-dotfiles.
+
+- name: Determine filename for whitelist checks.
+  set_fact:
+    dotfile_current_file: "{{ dotfiles_repo_path | basename }}"
+
+- name: Make sure directory and links are present.
+  block:
+    - name: Ensure required config directory exists.
+      file:
+        path: "{{ dotfiles_repo_path | replace(dotfiles_config_segment, '') | dirname }}"
+        state: directory
+      become: "{{ dotfiles_repo.become_user is defined }}"
+      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
+
+    - name: Link dotfile '{{ dotfile_current_file }}' into place.
+      file:
+        src: "{{ dotfiles_repo_path }}"
+        dest: "{{ dotfiles_repo_path | replace(dotfiles_config_segment, '') }}"
+        state: link
+        force: "{{ dotfiles_repo.force_links | default(false) }}"
+      become: "{{ dotfiles_repo.become_user is defined }}"
+      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
+
+  when:
+    - "dotfiles_repo_whitelist_length > 0"
+    - "dotfile_current_file in dotfiles_repo.whitelist"
+    - "dotfile_current_file != '.git'"
