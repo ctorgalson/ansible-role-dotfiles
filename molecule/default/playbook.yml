@@ -11,6 +11,7 @@
         version: "master"
         become_user: "molecule-1"
         whitelist:
+          - ".git"
           - ".gitconfig"
           - ".vimrc"
       - repo: "https://ctorgalson@github.com/paulirish/dotfiles.git"

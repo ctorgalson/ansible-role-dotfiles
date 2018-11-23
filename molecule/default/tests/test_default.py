@@ -16,9 +16,18 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     ('molecule-2', '/home/molecule-2/.vim'),
     ('molecule-2', '/home/molecule-2/.zshrc'),
 ])
-def test_packages(host, user, path):
+def test_present_dotfiles(host, user, path):
     f = host.file(path)
 
     assert f.exists
     assert f.user == user
     assert f.group == user
+
+
+@pytest.mark.parametrize('user,path', [
+    ('molecule-1', '/home/molecule-1/.git'),
+])
+def test_absent_dotfiles(host, user, path):
+    f = host.file(path)
+
+    assert not f.exists
