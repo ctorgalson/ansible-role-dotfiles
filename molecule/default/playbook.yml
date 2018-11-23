@@ -4,10 +4,21 @@
   roles:
     - role: ansible-role-dotfiles
   vars:
-    dotfiles_owner: "molecule"
-    dotfiles_group: "molecule"
-    dotfiles_whitelist:
-      - ".vimrc.after"
-      - ".vimrc.before"
-      - "konsolerc"
-      - "Solarized Dev.profile"
+    dotfiles_repos:
+      - repo: "https://git@github.com/paulirish/dotfiles.git"
+        user: "molecule-1"
+        name: "dotfiles"
+        version: "master"
+        become_user: "molecule-1"
+        whitelist:
+          - ".git"
+          - ".gitconfig"
+          - ".vimrc"
+      - repo: "https://git@github.com/paulirish/dotfiles.git"
+        user: "molecule-2"
+        name: "dotfiles"
+        version: "master"
+        become_user: "molecule-2"
+        whitelist:
+          - ".vim"
+          - ".zshrc"

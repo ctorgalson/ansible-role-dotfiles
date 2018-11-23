@@ -1,65 +1,12 @@
 ---
-# tasks file for ansible-role-dotfiles
+# Tasks file for ansible-role-dotfiles
 
-- name: Set path-related facts.
+- name: Determine home directory for paths.
   set_fact:
-    dotfiles_home_dir: "{{ dotfiles_home }}/{{ dotfiles_owner }}"
-    dotfiles_config_segment: "/{{ dotfiles_conf_dir }}/{{ dotfiles_repo_name }}"
+    dotfiles_home_dir: "{{  (ansible_os_family == 'Darwin') | ternary('Users', 'home') }}"
 
-- name: Set git repo dest fact.
-  set_fact:
-    dotfiles_repo_dest: "{{ dotfiles_home_dir }}{{ dotfiles_config_segment }}"
-
-- name: Clone dotfiles repo to host.
-  git:
-    repo: "{{ dotfiles_repo_repo }}"
-    dest: "{{ dotfiles_repo_dest }}"
-    version: master
-    clone: true
-
-- name: Fix permissions on newly cloned repository.
-  file:
-    path: "{{ dotfiles_repo_dest }}"
-    state: directory
-    recurse: true
-    owner: "{{ dotfiles_owner }}"
-    group: "{{ dotfiles_group }}"
-  changed_when: false
-
-- name: Change git remote to `git@` style when configured.
-  command: "{{ item }}"
-  args:
-    chdir: "{{ dotfiles_repo_dest }}"
-  with_items:
-    - "git remote rm origin"
-    - "git remote add origin git@github.com:{{ dotfiles_user_name }}/{{ dotfiles_repo_name }}.git"
-  become: true
-  when: dotfiles_add_ssh_origin
-
-- name: Find files in newly cloned repository.
-  command: >
-    find "{{ dotfiles_repo_dest }}" -type f
-    ! -path "{{ dotfiles_repo_dest }}/.git/*"
-    ! -path "{{ dotfiles_repo_dest }}/README.md"
-  changed_when: false
-  register: dotfiles_paths
-
-- name: Create required config directories.
-  file:
-    path: "{{ item | replace(dotfiles_config_segment, '') | dirname }}"
-    state: directory
-    owner: "{{ dotfiles_owner }}"
-    group: "{{ dotfiles_group }}"
-  with_items: "{{ dotfiles_paths.stdout_lines }}"
-  when: "(item | basename in dotfiles_whitelist) or (dotfiles_whitelist | length < 1)"
-
-- name: Link dotfiles into place.
-  file:
-    src: "{{ item }}"
-    dest: "{{ item | replace(dotfiles_config_segment, '') }}"
-    state: link
-    force: "{{ dotfiles_force_links }}"
-    owner: "{{ dotfiles_owner }}"
-    group: "{{ dotfiles_group }}"
-  with_items: "{{ dotfiles_paths.stdout_lines }}"
-  when: "(item | basename in dotfiles_whitelist) or (dotfiles_whitelist | length < 1)"
+- name: Clone and link dotfiles.
+  include_tasks: "clone-dotfiles.yml"
+  loop: "{{ dotfiles_repos }}"
+  loop_control:
+    loop_var: dotfiles_repo

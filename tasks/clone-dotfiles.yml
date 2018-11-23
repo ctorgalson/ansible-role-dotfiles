@@ -1,0 +1,57 @@
+---
+# Dotfile clone tasks for ansible-role-dotfiles.
+
+- name: Set path-related facts per dotfile repo.
+  set_fact:
+    dotfiles_user_dir: "/{{ dotfiles_home_dir }}/{{ dotfiles_repo.user }}"
+    dotfiles_config_segment: "/{{ dotfiles_conf_dir }}/{{ dotfiles_repo.name }}"
+
+- name: Set repository clone destination.
+  set_fact:
+    dotfiles_repo_dest: "{{ dotfiles_user_dir }}{{ dotfiles_config_segment }}"
+
+- name: Make sure we have a usable whitelist, even if it's empty.
+  set_fact:
+    dotfiles_whitelist: "{{ dotfiles_repo.whitelist | default([]) }}"
+
+- name: Clone directories into a specified location.
+  block:
+    - name: Ensure dotfiles_conf_dir exists.
+      file:
+        path: "{{ dotfiles_repo_dest | dirname }}"
+        state: directory
+      become: "{{ dotfiles_repo.become_user is defined }}"
+      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
+
+    - name: Clone dotfiles repo into place.
+      git:
+        repo: "{{ dotfiles_repo.repo }}"
+        dest: "{{ dotfiles_repo_dest }}"
+        version: "{{ dotfiles_repo.version | default('master') }}"
+        clone: true
+        recursive: false
+        accept_hostkey: true
+      become: "{{ dotfiles_repo.become_user is defined }}"
+      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
+
+# Symlinking operations.
+
+- name: Discover files and symlink them.
+  block:
+    - name: Determine whitelist length for whitelist checks.
+      set_fact:
+        dotfiles_repo_whitelist_length: "{{ dotfiles_repo.whitelist | length }}"
+
+    - name: Find files in newly cloned repository.
+      command: >
+        find "{{ dotfiles_repo_dest }}" ! -type l
+        ! -path "{{ dotfiles_repo_dest }}/.git/*"
+        ! -path "{{ dotfiles_repo_dest }}/README.md"
+      changed_when: false
+      register: dotfiles_repo_paths
+
+    - name: Symlink dotfiles.
+      include_tasks: "symlink-dotfiles.yml"
+      loop: "{{ dotfiles_repo_paths.stdout_lines }}"
+      loop_control:
+        loop_var: dotfiles_repo_path
