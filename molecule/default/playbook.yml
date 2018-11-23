@@ -4,8 +4,6 @@
   roles:
     - role: ansible-role-dotfiles
   vars:
-    dotfiles_owner: "molecule"
-    dotfiles_group: "molecule"
     dotfiles_repos:
       - repo: "https://ctorgalson@github.com/paulirish/dotfiles.git"
         user: "molecule-1"
