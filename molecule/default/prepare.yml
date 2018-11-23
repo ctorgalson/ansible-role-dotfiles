@@ -5,17 +5,13 @@
   tasks:
     - name: Install required packages on host.
       apt:
-        name: "{{ item }}"
-      with_items:
-        - git
+        name: ["git"]
 
     - name: Create molecule user for testing.
       user:
-        name: molecule
-
-    - name: Ensure dotfiles parent directory exists.
-      file:
-        path: "/home/molecule/.ansible-managed-config"
-        state: directory
-        owner: "molecule"
-        group: "molecule"
+        name: "{{ name }}"
+      loop:
+        - "molecule-1"
+        - "molecule-2"
+      loop_control:
+        loop_var: name
