@@ -3,3 +3,4 @@ molecule/*/.molecule
 molecule/*/pytestdebug.log
 molecule/*/tests/*.pyc
 molecule/*/tests/__pycache__/*
+.venv
