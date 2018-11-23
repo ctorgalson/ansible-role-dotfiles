@@ -8,15 +8,17 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 
-@pytest.mark.parametrize('path', [
-    '/home/molecule/.config/konsolerc',
-    '/home/molecule/.local/share/konsole',
-    '/home/molecule/.vimrc.after',
-    '/home/molecule/.vimrc.before',
+@pytest.mark.parametrize('user,path', [
+    ('molecule-1', '/home/molecule-1/.ansible-managed-config'),
+    ('molecule-1', '/home/molecule-1/.gitconfig'),
+    ('molecule-1', '/home/molecule-1/.vimrc'),
+    ('molecule-2', '/home/molecule-2/.ansible-managed-config'),
+    ('molecule-2', '/home/molecule-2/.vim'),
+    ('molecule-2', '/home/molecule-2/.zshrc'),
 ])
-def test_packages(host, path):
+def test_packages(host, user, path):
     f = host.file(path)
 
     assert f.exists
-    assert f.user == 'molecule'
-    assert f.group == 'molecule'
+    assert f.user == user
+    assert f.group == user
