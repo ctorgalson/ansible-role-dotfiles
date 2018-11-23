@@ -39,7 +39,7 @@ For more information and tests, see the repository's `molecule/` directory.
         - role: ansible-role-dotfiles
       vars:
         dotfiles_repos:
-          - repo: "https://github.com/paulirish/dotfiles.git"
+          - repo: "https://git@github.com/paulirish/dotfiles.git"
             user: "molecule-1"
             name: "dotfiles"
             version: "master"
@@ -47,7 +47,7 @@ For more information and tests, see the repository's `molecule/` directory.
             whitelist:
               - ".gitconfig"
               - ".vimrc"
-          - repo: "https://github.com/paulirish/dotfiles.git"
+          - repo: "https://git@github.com/paulirish/dotfiles.git"
             user: "molecule-2"
             name: "dotfiles"
             version: "master"
