@@ -24,6 +24,6 @@
       become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
 
   when:
-    - "dotfiles_repo_whitelist_length > 0"
+    - "dotfiles_repo_whitelist_length"
     - "dotfile_current_file in dotfiles_repo.whitelist"
     - "dotfile_current_file != '.git'"
