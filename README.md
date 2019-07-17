@@ -21,11 +21,11 @@ This role clones one or more dotfiles repositories from Github (or wherever), sc
 
 The following playbook creates/links:
 
-- Files, directories, and links in the home directory of the user `molecule-1:
+- Files, directories, and links in the home directory of the user `molecule-1`:
   - `.ansible-managed-config/dotfiles`
   - `.gitconfig`
   - `.vimrc`
-- Files, directories, and links in the home directory of the user `molecule-1:
+- Files, directories, and links in the home directory of the user `molecule-2`:
   - `.ansible-managed-config/dotfiles`
   - `.vim`
   - `.zshrc`
@@ -59,4 +59,3 @@ For more information and tests, see the repository's `molecule/` directory.
 ## License
 
 GPLv3
-
