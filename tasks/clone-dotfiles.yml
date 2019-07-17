@@ -40,7 +40,7 @@
   block:
     - name: Determine whitelist length for whitelist checks.
       set_fact:
-        dotfiles_repo_whitelist_length: "{{ dotfiles_repo.whitelist | length }}"
+        dotfiles_repo_whitelist_length: "{{ dotfiles_repo.whitelist | length | int }}"
 
     - name: Find files in newly cloned repository.
       command: >
