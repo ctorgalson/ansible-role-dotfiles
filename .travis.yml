@@ -10,4 +10,4 @@ install:
   - pip install --upgrade pip
   - pip install testinfra docker molecule
 script:
-  - molecule --debug test
+  - molecule test
