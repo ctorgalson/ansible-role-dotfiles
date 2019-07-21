@@ -3,14 +3,14 @@
 
 - name: Set path-related facts per dotfile repo.
   set_fact:
-    dotfiles_user_dir: "/{{ dotfiles_home_dir }}/{{ dotfiles_repo.user }}"
+    dotfiles_user_dir: "/{{ dotfiles_home_dir }}/{{ dotfiles_repo.owner }}"
     dotfiles_config_segment: "/{{ dotfiles_conf_dir }}/{{ dotfiles_repo.name }}"
 
 - name: Set repository clone destination.
   set_fact:
     dotfiles_repo_dest: "{{ dotfiles_user_dir }}{{ dotfiles_config_segment }}"
 
-- name: Make sure we have a usable whitelist, even if it's empty.
+- name: Make sure we have a usable whitelist, even if empty.
   set_fact:
     dotfiles_whitelist: "{{ dotfiles_repo.whitelist | default([]) }}"
 
@@ -19,9 +19,9 @@
     - name: Ensure dotfiles_conf_dir exists.
       file:
         path: "{{ dotfiles_repo_dest | dirname }}"
+        owner: "{{ dotfiles_repo.owner }}"
+        group: "{{ dotfiles_repo.group }}"
         state: directory
-      become: "{{ dotfiles_repo.become_user is defined }}"
-      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
 
     - name: Clone dotfiles repo into place.
       git:
@@ -31,17 +31,20 @@
         clone: true
         recursive: false
         accept_hostkey: true
-      become: "{{ dotfiles_repo.become_user is defined }}"
-      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
+
+    - name: Make sure dotfiles repo has the correct ownership.
+      file:
+        path: "{{ dotfiles_repo_dest }}"
+        owner: "{{ dotfiles_repo.owner }}"
+        group: "{{ dotfiles_repo.group }}"
+        recurse: true
+        state: directory
+      changed_when: false
 
 # Symlinking operations.
 
 - name: Discover files and symlink them.
   block:
-    - name: Determine whitelist length for whitelist checks.
-      set_fact:
-        dotfiles_repo_whitelist_length: "{{ dotfiles_repo.whitelist | length }}"
-
     - name: Find files in newly cloned repository.
       command: >
         find "{{ dotfiles_repo_dest }}" ! -type l
