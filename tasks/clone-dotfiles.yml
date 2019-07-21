@@ -39,6 +39,7 @@
         group: "{{ dotfiles_repo.group }}"
         recurse: true
         state: directory
+      changed_when: false
 
 # Symlinking operations.
 

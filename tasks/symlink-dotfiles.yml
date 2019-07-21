@@ -24,6 +24,5 @@
         force: "{{ dotfiles_repo.force_links | default(false) }}"
 
   when:
-    - "dotfiles_repo_whitelist is defined"
     - "dotfile_current_file in dotfiles_repo.whitelist"
     - "dotfile_current_file != '.git'"
