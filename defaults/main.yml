@@ -7,7 +7,6 @@ dotfiles_conf_dir: ".ansible-managed-config"
 
 dotfiles_repos: []
 # - repo: "https://github.com/ctorgalson/dotfiles.git"
-#   user: "molecule"
 #   name: "dotfiles"
 #   version: "master"
 #   owner: "molecule"

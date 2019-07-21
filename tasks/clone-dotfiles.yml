@@ -3,7 +3,7 @@
 
 - name: Set path-related facts per dotfile repo.
   set_fact:
-    dotfiles_user_dir: "/{{ dotfiles_home_dir }}/{{ dotfiles_repo.user }}"
+    dotfiles_user_dir: "/{{ dotfiles_home_dir }}/{{ dotfiles_repo.owner }}"
     dotfiles_config_segment: "/{{ dotfiles_conf_dir }}/{{ dotfiles_repo.name }}"
 
 - name: Set repository clone destination.
