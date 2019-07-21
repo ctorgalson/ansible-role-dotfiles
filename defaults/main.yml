@@ -10,7 +10,8 @@ dotfiles_repos: []
 #   user: "molecule"
 #   name: "dotfiles"
 #   version: "master"
-#   become_user: "molecule"
+#   owner: "molecule"
+#   group: "molecule"
 #   whitelist:
 #     - ".gitconfig"
 #     - ".vimrc"

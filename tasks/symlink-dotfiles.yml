@@ -10,18 +10,18 @@
     - name: Ensure required config directory exists.
       file:
         path: "{{ dotfiles_repo_path | replace(dotfiles_config_segment, '') | dirname }}"
+        owner: "{{ dotfiles_repo.owner }}"
+        group: "{{ dotfiles_repo.group }}"
         state: directory
-      become: "{{ dotfiles_repo.become_user is defined }}"
-      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
 
     - name: Link dotfile '{{ dotfile_current_file }}' into place.
       file:
         src: "{{ dotfiles_repo_path }}"
         dest: "{{ dotfiles_repo_path | replace(dotfiles_config_segment, '') }}"
+        owner: "{{ dotfiles_repo.owner }}"
+        group: "{{ dotfiles_repo.group }}"
         state: link
         force: "{{ dotfiles_repo.force_links | default(false) }}"
-      become: "{{ dotfiles_repo.become_user is defined }}"
-      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
 
   when:
     - "dotfiles_repo_whitelist_length"

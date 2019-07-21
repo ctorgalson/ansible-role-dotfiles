@@ -19,9 +19,9 @@
     - name: Ensure dotfiles_conf_dir exists.
       file:
         path: "{{ dotfiles_repo_dest | dirname }}"
+        owner: "{{ dotfiles_repo.owner }}"
+        group: "{{ dotfiles_repo.group }}"
         state: directory
-      become: "{{ dotfiles_repo.become_user is defined }}"
-      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
 
     - name: Clone dotfiles repo into place.
       git:
@@ -31,8 +31,13 @@
         clone: true
         recursive: false
         accept_hostkey: true
-      become: "{{ dotfiles_repo.become_user is defined }}"
-      become_user: "{{ dotfiles_repo.become_user | default(omit) }}"
+
+    - name: Make sure dotfiles repo has the correct ownership.
+      file:
+        path: "{{ dotfiles_repo.dest }}"
+        owner: "{{ dotfiles_repo.owner }}"
+        group: "{{ dotfiles_repo.group }}"
+        state: directory
 
 # Symlinking operations.
 
