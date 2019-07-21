@@ -16,8 +16,7 @@ This role clones one or more dotfiles repositories from Github (or wherever), sc
 | `.name`             | `-`                       | The name of the repository. Corresponds to the `dest` property of Ansible's Git module. |
 | `.version`          | `-`                       | The branch name, release/tag, or commit id to checkout. Corresponds to the `version` property of Ansible's Git module. |
 | `.whitelist`        | `-`                       | A list of files from the repo to symlink into the user directory. |
-| `dotfiles_force_links` | `false` | Whether or not to force the link
-creation (i.e. even if a file or directory already exists at the path). |
+| `dotfiles_force_links` | `false` | Whether or not to force the link creation (i.e. even if a file or directory already exists at the path). |
 
 ## Example Playbook
 
