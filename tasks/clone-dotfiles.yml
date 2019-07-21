@@ -10,7 +10,7 @@
   set_fact:
     dotfiles_repo_dest: "{{ dotfiles_user_dir }}{{ dotfiles_config_segment }}"
 
-- name: Make sure we have a usable whitelist, even if it's empty.
+- name: Make sure we have a usable whitelist, even if empty.
   set_fact:
     dotfiles_whitelist: "{{ dotfiles_repo.whitelist | default([]) }}"
 
@@ -34,19 +34,16 @@
 
     - name: Make sure dotfiles repo has the correct ownership.
       file:
-        path: "{{ dotfiles_repo.dest }}"
+        path: "{{ dotfiles_repo_dest }}"
         owner: "{{ dotfiles_repo.owner }}"
         group: "{{ dotfiles_repo.group }}"
+        recurse: true
         state: directory
 
 # Symlinking operations.
 
 - name: Discover files and symlink them.
   block:
-    - name: Determine whitelist length for whitelist checks.
-      set_fact:
-        dotfiles_repo_whitelist_length: "{{ dotfiles_repo.whitelist | length }}"
-
     - name: Find files in newly cloned repository.
       command: >
         find "{{ dotfiles_repo_dest }}" ! -type l
