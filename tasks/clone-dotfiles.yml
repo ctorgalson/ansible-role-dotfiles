@@ -29,6 +29,7 @@
         dest: "{{ dotfiles_repo_dest }}"
         version: "{{ dotfiles_repo.version | default('master') }}"
         clone: true
+        key_file: "{{ dotfiles_repo.key_file | default(omit) }}"
         recursive: false
         accept_hostkey: true
 
