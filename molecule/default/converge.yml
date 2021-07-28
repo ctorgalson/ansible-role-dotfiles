@@ -20,7 +20,6 @@
         owner: "molecule-2"
         group: "molecule-2"
         allowlist:
-          - ".vim"
           - ".zshrc"
       - repo: "https://git@github.com/paulirish/dotfiles.git"
         name: "dotfiles"
