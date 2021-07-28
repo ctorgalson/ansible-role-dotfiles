@@ -13,7 +13,6 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     ('molecule-1', '/home/molecule-1/.gitconfig'),
     ('molecule-1', '/home/molecule-1/.vimrc'),
     ('molecule-2', '/home/molecule-2/.config/ansible-managed-config'),
-    ('molecule-2', '/home/molecule-2/.vim'),
     ('molecule-2', '/home/molecule-2/.zshrc'),
     ('molecule-3', '/home/molecule-3/.config/ansible-managed-config'),
     ('molecule-3', '/home/molecule-3/.bashrc'),
