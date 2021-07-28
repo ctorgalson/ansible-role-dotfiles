@@ -26,5 +26,5 @@
   when:
     - "dotfile_current_file != '.git'"
     - >
-      ((dotfiles_allowlist | length) and (dotfile_current_file in dotfiles_repo.allowlist))
-      or ((not dotfiles_allowlist | length) and (dotfile_current_file not in dotfiles_repo.denylist))
+      ((dotfiles_allowlist | length) and (dotfile_current_file in dotfiles_allowlist))
+      or ((not dotfiles_allowlist | length) and (dotfile_current_file not in dotfiles_denylist))
