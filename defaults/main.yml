@@ -11,9 +11,9 @@ dotfiles_repos: []
 #   version: "master"
 #   owner: "molecule"
 #   group: "molecule"
-#   whitelist:
+#   allowlist:
 #     - ".gitconfig"
 #     - ".vimrc"
-
-# Set to `true` to force overwriting existing files or symlinks.
-dotfiles_force_links: false
+#   denylist:
+#     - ".zshrc"
+#   force_links: false
