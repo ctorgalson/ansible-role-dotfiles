@@ -5,7 +5,9 @@
   tasks:
     - name: Install required packages on host.
       apt:
-        name: ["git"]
+        name:
+          - "git"
+        update_cache: true
 
     - name: Create molecule user for testing.
       user:
@@ -13,5 +15,6 @@
       loop:
         - "molecule-1"
         - "molecule-2"
+        - "molecule-3"
       loop_control:
         loop_var: name

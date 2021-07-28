@@ -10,9 +10,10 @@
   set_fact:
     dotfiles_repo_dest: "{{ dotfiles_user_dir }}{{ dotfiles_config_segment }}"
 
-- name: Make sure we have a usable whitelist, even if empty.
+- name: Make sure we have usable allowlist and denylist, even if empty.
   set_fact:
-    dotfiles_whitelist: "{{ dotfiles_repo.whitelist | default([]) }}"
+    dotfiles_allowlist: "{{ dotfiles_repo.allowlist | default([]) }}"
+    dotfiles_denylist: "{{ dotfiles_repo.denylist | default([]) }}"
 
 - name: Clone directories into a specified location.
   block:
@@ -48,7 +49,10 @@
   block:
     - name: Find files in newly cloned repository.
       command: >
-        find "{{ dotfiles_repo_dest }}" ! -type l
+        find "{{ dotfiles_repo_dest }}"
+        ! -type l
+        ! -type d
+        ! -path "{{ dotfiles_repo_dest }}"
         ! -path "{{ dotfiles_repo_dest }}/.git/*"
         ! -path "{{ dotfiles_repo_dest }}/README.md"
       changed_when: false

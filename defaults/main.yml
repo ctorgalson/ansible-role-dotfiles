@@ -3,7 +3,7 @@
 
 # This directory will be created in the user's home directory and dotfiles
 # will be cloned into it.
-dotfiles_conf_dir: ".ansible-managed-config"
+dotfiles_conf_dir: ".config/ansible-managed-config"
 
 dotfiles_repos: []
 # - repo: "https://github.com/ctorgalson/dotfiles.git"
@@ -11,9 +11,9 @@ dotfiles_repos: []
 #   version: "master"
 #   owner: "molecule"
 #   group: "molecule"
-#   whitelist:
+#   allowlist:
 #     - ".gitconfig"
 #     - ".vimrc"
-
-# Set to `true` to force overwriting existing files or symlinks.
-dotfiles_force_links: false
+#   denylist:
+#     - ".zshrc"
+#   force_links: false

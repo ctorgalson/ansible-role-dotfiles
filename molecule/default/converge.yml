@@ -10,7 +10,7 @@
         version: "master"
         owner: "molecule-1"
         group: "molecule-1"
-        whitelist:
+        allowlist:
           - ".git"
           - ".gitconfig"
           - ".vimrc"
@@ -19,6 +19,13 @@
         version: "master"
         owner: "molecule-2"
         group: "molecule-2"
-        whitelist:
-          - ".vim"
+        allowlist:
           - ".zshrc"
+      - repo: "https://git@github.com/paulirish/dotfiles.git"
+        name: "dotfiles"
+        version: "master"
+        owner: "molecule-3"
+        group: "molecule-3"
+        denylist:
+          - ".zshrc"
+        force_links: true

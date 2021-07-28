@@ -1,7 +1,7 @@
 ---
 # Dotfile symlink tasks for ansible-role-dotfiles.
 
-- name: Determine filename for whitelist checks.
+- name: Determine filename for allowlist checks.
   set_fact:
     dotfile_current_file: "{{ dotfiles_repo_path | basename }}"
 
@@ -24,5 +24,7 @@
         force: "{{ dotfiles_repo.force_links | default(false) }}"
 
   when:
-    - "dotfile_current_file in dotfiles_repo.whitelist"
     - "dotfile_current_file != '.git'"
+    - >
+      ((dotfiles_allowlist | length) and (dotfile_current_file in dotfiles_repo.allowlist))
+      or ((not dotfiles_allowlist | length) and (dotfile_current_file not in dotfiles_repo.denylist))
