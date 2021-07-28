@@ -4,6 +4,10 @@
 
 This role clones one or more dotfiles repositories from Github (or wherever), scans each one for files, then symlinks each file into a specified user's home directory. If a allowlist is provided, only allowlisted files will be linked.
 
+## Breaking Changes
+
+v2.0.0 includes what might be a breaking change: **the playbook no longer symlinks directories**, but continues to symlink files at any directory depth. The practical effect of this is that it's no longer possible, for example, to add `.vim` to a dotfile repository's `allowlist` and expect the _directory_ to be symlinked into place. If the `allowlist` is empty, or if files _within_ `.vim` are contained in an `allowlist`, those files will continue to be symlinked.
+
 ## Role Variables
 
 | Variable name       | Default value             | Description |
