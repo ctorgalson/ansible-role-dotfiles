@@ -1,6 +1,6 @@
 # Ansible Role Dotfiles
 
-[![Build Status](https://travis-ci.com/ctorgalson/ansible-role-ssl.svg?branch=master)](https://travis-ci.com/ctorgalson/ansible-role-dotfiles)
+![Molecule tests](https://github.com/ctorgalson/ansible-role-dotfiles/actions/workflows/molecule.yml/badge.svg)
 
 This role clones one or more dotfiles repositories from Github (or wherever), scans each one for files, then symlinks each file into a specified user's home directory. If a allowlist is provided, only allowlisted files will be linked.
 
