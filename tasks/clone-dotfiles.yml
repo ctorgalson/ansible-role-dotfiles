@@ -16,7 +16,7 @@
     dotfiles_denylist: "{{ dotfiles_repo.denylist | default([]) }}"
 
 - name: Clone directories into a specified location.
-  ansible.builtin.block:
+  block:
     - name: Ensure dotfiles_conf_dir exists.
       file:
         path: "{{ dotfiles_repo_dest | dirname }}"
