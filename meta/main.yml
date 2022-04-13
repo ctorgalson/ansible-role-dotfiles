@@ -3,6 +3,7 @@ galaxy_info:
   author: Christopher Torgalson
   description: A role to manage dofiles stored in git repositories.
 
+  namespace: ctorgalson
   role_name: dotfiles
 
   license: GPLv3
