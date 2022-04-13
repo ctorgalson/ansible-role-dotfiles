@@ -2,16 +2,16 @@
 # Dotfile clone tasks for ansible-role-dotfiles.
 
 - name: Set path-related facts per dotfile repo.
-  set_fact:
+  ansible.builtin.set_fact:
     dotfiles_user_dir: "/{{ dotfiles_home_dir }}/{{ dotfiles_repo.owner }}"
     dotfiles_config_segment: "/{{ dotfiles_conf_dir }}/{{ dotfiles_repo.name }}"
 
 - name: Set repository clone destination.
-  set_fact:
+  ansible.builtin.set_fact:
     dotfiles_repo_dest: "{{ dotfiles_user_dir }}{{ dotfiles_config_segment }}"
 
 - name: Make sure we have usable allowlist and denylist, even if empty.
-  set_fact:
+  ansible.builtin.set_fact:
     dotfiles_allowlist: "{{ dotfiles_repo.allowlist | default([]) }}"
     dotfiles_denylist: "{{ dotfiles_repo.denylist | default([]) }}"
 
@@ -25,7 +25,7 @@
         state: directory
 
     - name: Clone dotfiles repo into place.
-      git:
+      ansible.builtin.git:
         repo: "{{ dotfiles_repo.repo }}"
         dest: "{{ dotfiles_repo_dest }}"
         version: "{{ dotfiles_repo.version | default('master') }}"
@@ -33,9 +33,11 @@
         key_file: "{{ dotfiles_repo.key_file | default(omit) }}"
         recursive: false
         accept_hostkey: true
+      become: true
+      become_user: "{{ dotfiles_repo.owner }}"
 
     - name: Make sure dotfiles repo has the correct ownership.
-      file:
+      ansible.builtin.file:
         path: "{{ dotfiles_repo_dest }}"
         owner: "{{ dotfiles_repo.owner }}"
         group: "{{ dotfiles_repo.group }}"
@@ -48,7 +50,7 @@
 - name: Discover files and symlink them.
   block:
     - name: Find files in newly cloned repository.
-      command: >
+      ansible.builtin.command: >
         find "{{ dotfiles_repo_dest }}"
         ! -type l
         ! -type d
@@ -59,7 +61,7 @@
       register: dotfiles_repo_paths
 
     - name: Symlink dotfiles.
-      include_tasks: "symlink-dotfiles.yml"
+      ansible.builtin.include_tasks: "symlink-dotfiles.yml"
       loop: "{{ dotfiles_repo_paths.stdout_lines }}"
       loop_control:
         loop_var: dotfiles_repo_path

@@ -2,14 +2,14 @@
 # Dotfile symlink tasks for ansible-role-dotfiles.
 
 - name: Determine filename for allowlist checks.
-  set_fact:
+  ansible.builtin.set_fact:
     dotfile_current_file: "{{ dotfiles_repo_path | basename }}"
     dotfile_current_file_parent: "{{ dotfiles_repo_path | replace (dotfiles_config_segment, '') | dirname }}"
 
 - name: Make sure directory and links are present.
   block:
     - name: Ensure directory '{{ dotfile_current_file_parent }}/' exists.
-      file:
+      ansible.builtin.file:
         path: "{{ dotfile_current_file_parent }}"
         owner: "{{ dotfiles_repo.owner }}"
         group: "{{ dotfiles_repo.group }}"
@@ -17,7 +17,7 @@
       when: "dotfile_current_file_parent != dotfiles_user_dir"
 
     - name: Link dotfile '{{ dotfile_current_file }}' into place.
-      file:
+      ansible.builtin.file:
         src: "{{ dotfiles_repo_path }}"
         dest: "{{ dotfiles_repo_path | replace(dotfiles_config_segment, '') }}"
         owner: "{{ dotfiles_repo.owner }}"
